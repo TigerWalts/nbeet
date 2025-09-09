@@ -58,9 +58,19 @@ fn bitarray_from_string_impl(
           let assert <<v>> = <<0b000:size(3), t:bits-size(3), u:bits-size(2)>>
           let v = v - 1
           bitarray_from_string_impl(rest, <<
-            into:bits, ok_bytes:bits, 0xed, 0xa:size(4), v:size(4), 0b10:size(2),
-            w:bits-size(4), x:bits-size(2), 0xed, 0xb:size(4), y:bits-size(4),
-            0b10:size(2), z:bits-size(6),
+            into:bits,
+            ok_bytes:bits,
+            0xed,
+            0xa:size(4),
+            v:size(4),
+            0b10:size(2),
+            w:bits-size(4),
+            x:bits-size(2),
+            0xed,
+            0xb:size(4),
+            y:bits-size(4),
+            0b10:size(2),
+            z:bits-size(6),
           >>)
         }
         // Invalid
@@ -121,9 +131,18 @@ fn string_from_bitarray_impl(
           let v = v + 1
           let assert <<t:bits-size(3), u:bits-size(2)>> = <<v:size(5)>>
           string_from_bitarray_impl(rest, <<
-            into:bits, ok_bytes:bits, 0b11110:size(5), t:bits-size(3),
-            0b10:size(2), u:bits-size(2), w:bits-size(4), 0b10:size(2),
-            x:bits-size(2), y:bits-size(4), 0b10:size(2), z:bits-size(6),
+            into:bits,
+            ok_bytes:bits,
+            0b11110:size(5),
+            t:bits-size(3),
+            0b10:size(2),
+            u:bits-size(2),
+            w:bits-size(4),
+            0b10:size(2),
+            x:bits-size(2),
+            y:bits-size(4),
+            0b10:size(2),
+            z:bits-size(6),
           >>)
         }
         // Invalid
