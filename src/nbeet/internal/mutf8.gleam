@@ -160,6 +160,12 @@ fn split_at_special_cases(from: BitArray, at: Int) -> #(BitArray, BitArray) {
     <<before:bits-size(at), 0xed, 0xA:size(4), rest:bits>> -> #(before, <<
       0xed, 0xA:size(4), rest:bits,
     >>)
+    // 2-byte
+    <<_before:bits-size(at), 0b110:size(3), _rest:bits>> ->
+      split_at_special_cases(from, at + 16)
+    // 3-byte
+    <<_before:bits-size(at), 0b1110:size(4), _rest:bits>> ->
+      split_at_special_cases(from, at + 24)
     // Scan the next byte
     _ -> split_at_special_cases(from, at + 8)
   }
