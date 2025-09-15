@@ -72,14 +72,22 @@ fn bitarray_from_string_impl(
       >>)
     }
     // Invalid
-    #(_, rest) -> {
-      let assert <<a, _rest:bits>> = rest
-      let assert Ok(bits) = int.to_base_string(a, 2)
-      Error(
-        "Unexpected byte while encoding string to mutf8, expected the start of a 4-byte character (0b11110xxx) or a null (0b00000000), next byte is: 0x"
-        <> bits,
-      )
-    }
+    #(_, rest) ->
+      case rest {
+        <<a, _rest:bits>> -> {
+          let bits = int.to_base2(a)
+          Error(
+            "Unexpected byte while encoding string to mutf8, expected the start of a 4-byte character (0b11110xxx) or a null (0b00000000), next byte is: 0x"
+            <> bits,
+          )
+        }
+
+        _ ->
+          Error(
+            "Less than 1 byte remaining in String while encoding String to mutf8. "
+            <> "This shouldn't happen, this is a bug.",
+          )
+      }
   }
 }
 
@@ -138,14 +146,22 @@ fn string_from_bitarray_impl(
       >>)
     }
     // Invalid
-    #(_, rest) -> {
-      let assert <<a, _rest:bits>> = rest
-      let assert Ok(bits) = int.to_base_string(a, 2)
-      Error(
-        "Unexpected byte while encoding mutf8 to String, expected the start of a 6-byte character (0b11101101) or a null (0b00000000), next byte is: 0x"
-        <> bits,
-      )
-    }
+    #(_, rest) ->
+      case rest {
+        <<a, _rest:bits>> -> {
+          let bits = int.to_base2(a)
+          Error(
+            "Unexpected byte while encoding mutf8 to String, expected the start of a 6-byte character (0b11101101) or a null (0b00000000), next byte is: 0x"
+            <> bits,
+          )
+        }
+
+        _ ->
+          Error(
+            "Less than 1 byte remaining in bit-string while encoding mutf8 to String. "
+            <> "This shouldn't happen, either the passed bit-array does not contain a multiple of 8 bits or this is a bug in the string conversion code.",
+          )
+      }
   }
 }
 
