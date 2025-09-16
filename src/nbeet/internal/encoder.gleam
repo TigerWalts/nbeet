@@ -69,7 +69,7 @@ fn encode_byte_array(byte_array: BitArray) {
 }
 
 fn encode_string(string: String) {
-  let bytes = mutf8.bitarray_from_string(string)
+  let assert Ok(bytes) = mutf8.bitarray_from_string(string)
   let length = bit_array.byte_size(bytes)
   <<length:int-big-size(16), bytes:bits>>
 }
